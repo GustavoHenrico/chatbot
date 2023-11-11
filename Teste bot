@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char pergunta[100];
+    char resposta[100];
+    int avaliacao;
+} RegistroConversa;
+
+void responder(char *pergunta) {
+    if (strstr(pergunta, "como vai")) {
+        printf("Estou bem, obrigado por perguntar!\n");
+    } else if (strstr(pergunta, "qual é o seu nome")) {
+        printf("Meu nome é Helpzap\n");
+    } else if (strstr(pergunta, "adeus")) {
+        printf("Até mais! Se precisar de ajuda, estou por aqui.\n");
+    } else if (strstr(pergunta, "o que você faz")) {
+        printf("Eu sou um chatbot simples e estou aqui para responder às suas perguntas.\n");
+    } else if (strstr(pergunta, "qual é a sua cor favorita")) {
+        printf("Não tenho uma cor favorita, pois sou apenas um programa de computador.\n");
+        } else if (strstr(pergunta, "tenho uma dúvida")) {
+        printf("Qual a sua plataforma (mobile/desktop)?\n");
+        } else if (strstr(pergunta, "")) {
+        printf(".\n");
+        } else if (strstr(pergunta, "")) {
+        printf(".\n");
+        } else if (strstr(pergunta, "")) {
+        printf(".\n");
+    } else {
+        printf("Desculpe, não entendi a pergunta.\n");
+    }
+}
+
+int obterAvaliacao() {
+    int avaliacao;
+
+    do {
+        printf("Avalie de 1 a 5 (1 = ruim, 5 = excelente): ");
+        scanf("%d", &avaliacao);
+
+        if (avaliacao < 1 || avaliacao > 5) {
+            printf("Por favor, forneça uma avaliação válida de 1 a 5.\n");
+        }
+    } while (avaliacao < 1 || avaliacao > 5);
+
+    return avaliacao;
+}
+
+void salvarConversa(RegistroConversa *conversas, int *contador, char *pergunta, char *resposta, int avaliacao) {
+    strcpy(conversas[*contador].pergunta, pergunta);
+    strcpy(conversas[*contador].resposta, resposta);
+    conversas[*contador].avaliacao = avaliacao;
+    (*contador)++;
+}
+
+int main() {
+    char pergunta[100];
+    RegistroConversa conversas[100];
+    int contadorConversas = 0;
+
+    printf("Bem-vindo ao ChatBot em C! Digite 'adeus' para sair.\n");
+
+    while (1) {
+        printf("Você: ");
+        fgets(pergunta, sizeof(pergunta), stdin);
+
+        size_t length = strlen(pergunta);
+        if (length > 0 && pergunta[length - 1] == '\n') {
+            pergunta[length - 1] = '\0';
+        }
+
+        if (strcmp(pergunta, "adeus") == 0) {
+            printf("ChatBot: Até mais!\n");
+            break;
+        }
+
+        responder(pergunta);
+
+        int avaliacao = obterAvaliacao();
+        salvarConversa(conversas, &contadorConversas, pergunta, "Resposta do ChatBot", avaliacao);
+    }
+
+    printf("\nHistórico de Conversas:\n");
+    for (int i = 0; i < contadorConversas; i++) {
+        printf("Pergunta: %s\n", conversas[i].pergunta);
+        printf("Resposta: %s\n", conversas[i].resposta);
+        printf("Avaliação: %d\n\n", conversas[i].avaliacao);
+    }
+
+    return 0;
+}
+
+
